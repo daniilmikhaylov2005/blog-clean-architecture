@@ -5,14 +5,12 @@ import (
 )
 
 type Service struct {
-	repositoryPostgres *repositoryPostgres.RepositoryPostgres
-  IPostService
+	IPostService
 }
 
 func NewService(postgres *repositoryPostgres.RepositoryPostgres) *Service {
   postService := NewPostService(postgres)
   return &Service{
-    repositoryPostgres: postgres,
     IPostService: postService,
   }
 }
