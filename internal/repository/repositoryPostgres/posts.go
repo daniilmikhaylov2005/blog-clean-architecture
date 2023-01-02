@@ -10,6 +10,7 @@ type IPostRepository interface {
   InsertPost(post models.Post, userId int) (int, error)
   SelectAllPosts()([]models.Post, error)
   SelectPostById(id int) (models.Post, error)
+  PutPost(post models.Post, postId int) (models.Post, error)
 }
 
 type PostRepository struct {
@@ -69,6 +70,21 @@ func (r *PostRepository) SelectPostById(id int) (models.Post, error) {
   if err := row.Scan(&post.ID, &post.Title, &post.Body, &post.UserId); err != nil {
     return models.Post{}, err
   }
+
+  return post, nil
+}
+
+func (r *PostRepository) PutPost(post models.Post, postId int) (models.Post, error) {
+  var id int
+
+  query := `UPDATE posts SET title=$1, body=$2, user_id=$3 WHERE id=$4 RETURNING id`
+  row := r.db.QueryRow(query, post.Title, post.Body, post.UserId, postId)
+  
+  if err := row.Scan(&id); err != nil {
+    return models.Post{}, err
+  }
+  
+  post.ID = id
 
   return post, nil
 }

@@ -11,7 +11,7 @@ type Post struct {
   ID       int    `json:"id"`
   UserId   int    `json:"user_id"`
   Title    string `json:"title"`
-  Body string `json:"body_text"`
+  Body string `json:"body"`
 }
 
 type ErrorResponse struct {
