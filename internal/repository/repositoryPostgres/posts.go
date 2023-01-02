@@ -8,6 +8,7 @@ import (
 
 type IPostRepository interface {
   InsertPost(post models.Post, userId int) (int, error)
+  SelectAllPosts()([]models.Post, error)
 }
 
 type PostRepository struct {
@@ -31,4 +32,29 @@ func (r *PostRepository) InsertPost(post models.Post, userId int) (int, error) {
   }
 
   return id, nil
+}
+
+func (r *PostRepository) SelectAllPosts() ([]models.Post, error) {
+  var posts []models.Post
+
+  query := `SELECT * FROM posts`
+  rows, err := r.db.Query(query)
+
+  if err != nil {
+    return []models.Post{}, err
+  }
+  
+  defer rows.Close()
+
+  for rows.Next() {
+    var post models.Post
+    
+    if err := rows.Scan(&post.ID, &post.Title, &post.Body, &post.UserId); err != nil {
+      return []models.Post{}, err
+    }
+
+    posts = append(posts, post)
+  }
+
+  return posts, nil
 }

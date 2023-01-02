@@ -31,7 +31,13 @@ func (h *Handler) createPost(c *gin.Context) {
 }
 
 func (h *Handler) getAllPosts(c *gin.Context) {
-	c.JSON(http.StatusOK, map[string]string{"message": "hello"})
+  posts, err := h.services.GetAllPosts()
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+      Error: err.Error(),
+    })
+  }
+	c.JSON(http.StatusOK, posts)
 }
 
 func (h *Handler) getPostById(c *gin.Context) {

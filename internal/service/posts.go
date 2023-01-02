@@ -7,18 +7,23 @@ import (
 
 type IPostService interface {
   CreatePost(post models.Post, userId int) (int, error)
+  GetAllPosts() ([]models.Post, error)
 }
 
 type PostService struct {
-  repositoryPotgres *repositoryPostgres.RepositoryPostgres
+  repositoryPostgres *repositoryPostgres.RepositoryPostgres
 }
 
 func NewPostService(repositoryPostgres *repositoryPostgres.RepositoryPostgres) *PostService {
   return &PostService{
-    repositoryPotgres: repositoryPostgres,
+    repositoryPostgres: repositoryPostgres,
   }
 }
 
 func (s *PostService) CreatePost(post models.Post, userId int) (int, error) {
-  return s.repositoryPotgres.InsertPost(post, userId)
+  return s.repositoryPostgres.InsertPost(post, userId)
+}
+
+func (s *PostService) GetAllPosts() ([]models.Post, error) {
+  return s.repositoryPostgres.SelectAllPosts()
 }
