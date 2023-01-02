@@ -8,6 +8,7 @@ import (
 type IPostService interface {
   CreatePost(post models.Post, userId int) (int, error)
   GetAllPosts() ([]models.Post, error)
+  GetPostById(id int) (models.Post, error)
 }
 
 type PostService struct {
@@ -26,4 +27,8 @@ func (s *PostService) CreatePost(post models.Post, userId int) (int, error) {
 
 func (s *PostService) GetAllPosts() ([]models.Post, error) {
   return s.repositoryPostgres.SelectAllPosts()
+}
+
+func (s *PostService) GetPostById(id int) (models.Post, error) {
+  return s.repositoryPostgres.SelectPostById(id)
 }

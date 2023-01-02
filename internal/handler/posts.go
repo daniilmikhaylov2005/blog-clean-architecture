@@ -3,8 +3,10 @@ package handler
 import (
 	"net/http"
 
+	"strconv"
+
+	"github.com/daniilmikhaylov2005/blog/internal/models"
 	"github.com/gin-gonic/gin"
-  "github.com/daniilmikhaylov2005/blog/internal/models"
 )
 
 func (h *Handler) createPost(c *gin.Context) {
@@ -36,12 +38,32 @@ func (h *Handler) getAllPosts(c *gin.Context) {
     c.JSON(http.StatusInternalServerError, models.ErrorResponse{
       Error: err.Error(),
     })
+    return
   }
 	c.JSON(http.StatusOK, posts)
 }
 
 func (h *Handler) getPostById(c *gin.Context) {
-	c.JSON(http.StatusOK, map[string]string{"message": "hello"})
+  paramId:= c.Param("id")
+  postId, err := strconv.Atoi(paramId)
+  
+  if err != nil {
+    c.JSON(http.StatusBadRequest, models.ErrorResponse{
+      Error: err.Error(),
+    })
+    return
+  }
+  
+  post, err := h.services.GetPostById(postId)
+
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+      Error: err.Error(),
+    })
+    return
+  }
+
+	c.JSON(http.StatusOK, post)
 }
 
 func (h *Handler) updatePostById(c *gin.Context) {
