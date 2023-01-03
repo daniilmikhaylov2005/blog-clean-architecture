@@ -11,6 +11,7 @@ type IPostService interface {
   GetAllPosts() ([]models.Post, error)
   GetPostById(id int) (models.Post, error)
   UpdatePost(post models.Post, postId int) (models.Post, error)
+  DeletePost(postId, userId int) (int, error)
 }
 
 type PostService struct {
@@ -40,4 +41,8 @@ func (s *PostService) UpdatePost(post models.Post, postId int) (models.Post, err
     return models.Post{}, errors.New("Body, title or user id can't be empty.")
   }
   return s.repositoryPostgres.PutPost(post, postId)
+}
+
+func (s *PostService) DeletePost(postId, userId int) (int, error) {
+  return s.repositoryPostgres.DeletePost(postId, userId)
 }

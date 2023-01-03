@@ -11,6 +11,7 @@ type IPostRepository interface {
   SelectAllPosts()([]models.Post, error)
   SelectPostById(id int) (models.Post, error)
   PutPost(post models.Post, postId int) (models.Post, error)
+  DeletePost(postId, userId int) (int, error)
 }
 
 type PostRepository struct {
@@ -87,4 +88,17 @@ func (r *PostRepository) PutPost(post models.Post, postId int) (models.Post, err
   post.ID = id
 
   return post, nil
+}
+
+func (r *PostRepository) DeletePost(postId, userId int) (int, error) {
+  var deletedId int
+
+  query := `DELETE FROM posts WHERE id=$1 AND user_id=$2 RETURNING id`
+  row := r.db.QueryRow(query, postId, userId)
+
+  if err := row.Scan(&deletedId); err != nil {
+    return 0, err
+  }
+
+  return deletedId, nil
 }
