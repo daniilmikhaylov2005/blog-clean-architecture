@@ -6,11 +6,12 @@ import (
 
 type Service struct {
 	IPostService
+  IUserService
 }
 
 func NewService(postgres *repositoryPostgres.RepositoryPostgres) *Service {
-  postService := NewPostService(postgres)
   return &Service{
-    IPostService: postService,
+    IPostService: NewPostService(postgres),
+    IUserService: NewUserService(postgres),
   }
 }

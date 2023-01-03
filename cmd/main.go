@@ -14,7 +14,7 @@ func main() {
 
 	postgresDb := repositoryPostgres.NewPostgres(config)
   service := service.NewService(postgresDb)
-  handler := handler.NewHandler(service)
+  handler := handler.NewHandler(service, config)
   routes := handler.InitRoutes()
   
   srv := new(server.Server)

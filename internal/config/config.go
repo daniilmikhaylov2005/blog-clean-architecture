@@ -21,6 +21,7 @@ func InitConfig() map[string]string {
 	config["postgres_db"] = os.Getenv("POSTGRES_DB")
 	config["postgres_ssl"] = os.Getenv("POSTGRES_SSL")
   config["http_port"] = os.Getenv("HTTP_PORT")
+  config["access_token"] = os.Getenv("ACCESS_TOKEN")
 
 	return config
 }

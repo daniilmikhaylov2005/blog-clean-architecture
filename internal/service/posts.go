@@ -1,9 +1,10 @@
 package service
 
 import (
+	"errors"
+
 	"github.com/daniilmikhaylov2005/blog/internal/models"
 	"github.com/daniilmikhaylov2005/blog/internal/repository/repositoryPostgres"
-  "errors"
 )
 
 type IPostService interface {

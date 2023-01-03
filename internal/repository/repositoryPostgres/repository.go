@@ -10,6 +10,7 @@ import (
 
 type RepositoryPostgres struct {
 	IPostRepository
+  IUserRepository
 }
 
 func NewPostgres(config map[string]string) *RepositoryPostgres {
@@ -28,5 +29,6 @@ func NewPostgres(config map[string]string) *RepositoryPostgres {
 
 	return &RepositoryPostgres{
     IPostRepository: NewPostRepository(db),
+    IUserRepository: NewUserRepository(db),
 	}
 }

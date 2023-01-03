@@ -7,10 +7,11 @@ import (
 
 type Handler struct {
 	services *service.Service
+  accessToken string
 }
 
-func NewHandler(services *service.Service) *Handler {
-	return &Handler{services: services}
+func NewHandler(services *service.Service, config map[string]string) *Handler {
+	return &Handler{services: services, accessToken: config["access_token"]}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
@@ -26,6 +27,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			posts.PUT("/:id", h.updatePostById)
 			posts.DELETE("/:id", h.deletePostById)
 		}
+    auth := api.Group("/auth")
+    {
+      auth.POST("/signup", h.signup)
+      auth.POST("/signin", h.signin)
+    }
 	}
 
 	return router
