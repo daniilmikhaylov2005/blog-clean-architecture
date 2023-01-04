@@ -8,6 +8,7 @@ import (
 
 type IUserRepository interface{
   InsertUser(user models.User) error
+  SelectUserByUsername(username string) (models.User, error)
 }
 
 type UserRepository struct {
@@ -38,4 +39,17 @@ func (r *UserRepository) InsertUser(user models.User) error {
 
   tx.Commit()
   return nil
+}
+
+func (r *UserRepository) SelectUserByUsername(username string) (models.User, error) {
+  var user models.User
+
+  query := `SELECT * FROM users WHERE username=$1`
+  row := r.db.QueryRow(query, username)
+
+  if err := row.Scan(&user.ID, &user.Username, &user.Email, &user.Password); err != nil {
+    return models.User{}, err
+  }
+
+  return user, nil
 }

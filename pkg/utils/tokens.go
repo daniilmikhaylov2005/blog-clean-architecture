@@ -11,7 +11,7 @@ type TokenClaims struct {
 	UserId int `json:"userId"`
 }
 
-func CreateToken(userId int, accessToken string ,tokenLifetime time.Duration) (string, error) {
+func CreateToken(userId int, accessToken string, tokenLifetime time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(tokenLifetime).Unix(),
