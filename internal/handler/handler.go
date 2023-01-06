@@ -6,8 +6,8 @@ import (
 )
 
 type Handler struct {
-	services *service.Service
-  accessToken string
+	services    *service.Service
+	accessToken string
 }
 
 func NewHandler(services *service.Service, config map[string]string) *Handler {
@@ -21,17 +21,17 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		posts := api.Group("/posts")
 		{
-			posts.POST("/", h.createPost)
+			posts.POST("/", h.userIdentity, h.createPost)
 			posts.GET("/", h.getAllPosts)
 			posts.GET("/:id", h.getPostById)
-			posts.PUT("/:id", h.updatePostById)
-			posts.DELETE("/:id", h.deletePostById)
+			posts.PUT("/:id", h.userIdentity, h.updatePostById)
+			posts.DELETE("/:id", h.userIdentity, h.deletePostById)
 		}
-    auth := api.Group("/auth")
-    {
-      auth.POST("/signup", h.signup)
-      auth.POST("/signin", h.signin)
-    }
+		auth := api.Group("/auth")
+		{
+			auth.POST("/signup", h.signup)
+			auth.POST("/signin", h.signin)
+		}
 	}
 
 	return router

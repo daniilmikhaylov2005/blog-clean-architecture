@@ -1,14 +1,14 @@
 package repositoryPostgres
 
 import (
-	"database/sql"
+  "database/sql"
 
-	"github.com/daniilmikhaylov2005/blog/internal/models"
+  "github.com/daniilmikhaylov2005/blog/internal/models"
 )
 
 type IPostRepository interface {
   InsertPost(post models.Post, userId int) (int, error)
-  SelectAllPosts()([]models.Post, error)
+  SelectAllPosts() ([]models.Post, error)
   SelectPostById(id int) (models.Post, error)
   PutPost(post models.Post, postId int) (models.Post, error)
   DeletePost(postId, userId int) (int, error)
@@ -33,14 +33,14 @@ func (r *PostRepository) InsertPost(post models.Post, userId int) (int, error) {
 
   query := `INSERT INTO posts (title, body, user_id) VALUES ($1, $2, $3) RETURNING id`
   row := tx.QueryRow(query, post.Title, post.Body, userId)
-  
+
   var id int
 
   if err := row.Scan(&id); err != nil {
     tx.Rollback()
     return 0, err
   }
-  
+
   tx.Commit()
   return id, nil
 }
@@ -54,12 +54,12 @@ func (r *PostRepository) SelectAllPosts() ([]models.Post, error) {
   if err != nil {
     return []models.Post{}, err
   }
-  
+
   defer rows.Close()
 
   for rows.Next() {
     var post models.Post
-    
+
     if err := rows.Scan(&post.ID, &post.Title, &post.Body, &post.UserId); err != nil {
       return []models.Post{}, err
     }
@@ -92,16 +92,16 @@ func (r *PostRepository) PutPost(post models.Post, postId int) (models.Post, err
     return models.Post{}, err
   }
 
-  query := `UPDATE posts SET title=$1, body=$2, user_id=$3 WHERE id=$4 RETURNING id`
+  query := `UPDATE posts SET title=$1, body=$2 WHERE id=$4 AND user_id=$3 RETURNING id`
   row := tx.QueryRow(query, post.Title, post.Body, post.UserId, postId)
-  
+
   if err := row.Scan(&id); err != nil {
     tx.Rollback()
     return models.Post{}, err
   }
-  
+
   post.ID = id
-  
+
   tx.Commit()
 
   return post, nil
