@@ -26,6 +26,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			posts.GET("/:id", h.getPostById)
 			posts.PUT("/:id", h.userIdentity, h.updatePostById)
 			posts.DELETE("/:id", h.userIdentity, h.deletePostById)
+			posts.POST("/comments/:id", h.userIdentity, h.createPostComment)
 		}
 		auth := api.Group("/auth")
 		{
