@@ -22,10 +22,10 @@ func NewCommentRepository(rdb *redis.Client) *CommentRepository {
 }
 
 func (r *CommentRepository) PushComment(ctx context.Context, body string, userId, postId int) error {
-	strPostId := fmt.Sprintf("comments_of_post_%d", postId)
-	comment := fmt.Sprintf("%d:%s", userId, body)
+	strPostId := fmt.Sprintf("comments_to_post_%d", postId)
+	strUser := fmt.Sprintf("%d", userId)
 
-	err := r.rdb.LPush(ctx, strPostId, comment).Err()
+	err := r.rdb.HSet(ctx, strPostId, strUser, body).Err()
 	if err != nil {
 		return err
 	}
