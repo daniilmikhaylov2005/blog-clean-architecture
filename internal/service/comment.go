@@ -10,6 +10,7 @@ import (
 
 type ICommentService interface {
 	CreateComment(body string, userId, postId int) error
+	DeleteComment(userId, postId int) error
 }
 
 type CommentService struct {
@@ -28,4 +29,12 @@ func (s *CommentService) CreateComment(body string, userId, postId int) error {
 	}
 	ctx := context.Background()
 	return s.repositoryRedis.PushComment(ctx, body, userId, postId)
+}
+
+func (s *CommentService) DeleteComment(userId, postId int) error {
+	if userId == 0 || postId == 0 {
+		return errors.New("body can't be empty")
+	}
+	ctx := context.Background()
+	return s.repositoryRedis.DeleteComment(ctx, userId, postId)
 }
