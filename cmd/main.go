@@ -11,6 +11,17 @@ import (
 	"github.com/daniilmikhaylov2005/blog/server"
 )
 
+// @title Blog App API
+// @version 1.0
+// @description API Server for Blog website
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apiKey ApiKeyAuth
+// @in header
+// @name Authorization
+
 func main() {
 	config := config.InitConfig()
 

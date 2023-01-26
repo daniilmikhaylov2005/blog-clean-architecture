@@ -15,9 +15,17 @@ type Post struct {
 }
 
 type ErrorResponse struct {
-	Error string `json:"Error"`
+	Error string `json:"error"`
 }
 
 type PostComment struct {
 	Body string `json:"body"`
+}
+
+type SuccessResponse struct {
+	Status string `json:"status"`
+}
+
+type TokenResponse struct {
+	AccessToken string `json:"access_token"`
 }
